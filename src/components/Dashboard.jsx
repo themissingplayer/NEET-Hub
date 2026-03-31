@@ -1,4 +1,4 @@
- import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { SUBJECTS, SUBJECT_COLORS, NEET_TOPICS, SCIENCE_TIPS } from '../constants';
 import { load, today } from '../storage';
 
@@ -76,4 +76,47 @@ export default function Dashboard({ pomodoroSessions, setTab }) {
           <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>{doneTopic}/{totalTopics} topics</span>
         </div>
         <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 99 }}>
-          <div style={{ width: `${Math.round((doneTopic/totalTopics)*100)}%`, height: '100%', background: 'linear-gradient(90deg,#60a5fa,#34d399,#f472b6)',​​​​​​​​​​​​​​​​
+          <div style={{ width: `${Math.round((doneTopic/totalTopics)*100)}%`, height: '100%', background: 'linear-gradient(90deg,#60a5fa,#34d399,#f472b6)', borderRadius: 99, transition: 'width .5s' }} />
+        </div>
+      </div>
+
+      <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 16, border: '1px solid rgba(255,255,255,0.07)' }}>
+        <h3 style={{ color: '#f7bc64', margin: '0 0 14px', fontSize: 12, letterSpacing: 1, textTransform: 'uppercase' }}>Subject Coverage</h3>
+        {SUBJECTS.map(s => {
+          const pct = subjectProgress(s);
+          return (
+            <div key={s} style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#ccc', marginBottom: 5 }}>
+                <span>{s}</span>
+                <span style={{ color: SUBJECT_COLORS[s], fontWeight: 600 }}>{pct}%</span>
+              </div>
+              <div style={{ height: 6, background: 'rgba(255,255,255,0.06)', borderRadius: 99 }}>
+                <div style={{ width: `${pct}%`, height: '100%', background: SUBJECT_COLORS[s], borderRadius: 99, transition: 'width .5s' }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ background: 'rgba(96,165,250,0.06)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: 14, padding: 16 }}>
+        <div style={{ fontSize: 11, color: '#60a5fa', letterSpacing: .5, textTransform: 'uppercase', marginBottom: 6 }}>🔬 Science-Backed Tip</div>
+        <div style={{ fontSize: 13, color: '#ddd', lineHeight: 1.7 }}>{SCIENCE_TIPS[tipIdx]}</div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        {[
+          ['⏱ Start Focus', '#f97316', 'pomodoro'],
+          ['📚 Track Topics', '#34d399', 'neet'],
+          ['📓 Write Journal', '#a78bfa', 'journal'],
+          ['✅ Daily Habits', '#f7bc64', 'routine'],
+        ].map(([label, color, tabId]) => (
+          <button key={tabId} onClick={() => setTab(tabId)} style={{
+            padding: '14px 12px', borderRadius: 12, background: `${color}12`,
+            border: `1px solid ${color}30`, color, fontSize: 13, fontWeight: 600,
+            textAlign: 'center', transition: 'all .2s', cursor: 'pointer'
+          }}>{label}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
